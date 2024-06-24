@@ -1,7 +1,7 @@
 {
     "scene0414_00": {
         "situation_0": [
-            "There is a brown <chair-1-IMG> made of plastic at my 3 o'clock direction",
+            "There is a <chair-1-IMG> made of plastic at my 3 o'clock direction",
             [
                 "What object is used for carrying items at my 11 o'clock?"
             ]
