@@ -39,6 +39,15 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+        "three": "https://unpkg.com/three@0.127.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.127.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -217,6 +226,8 @@
             An overview of benchmarking tasks in MSR3D. We use green boxes for objects mentioned in
 situation descriptions, red for objects in questions, and purple for objects in navigation instructions.
           </p>
+          <!-- Adding the image below the paragraph --> 
+          <img src="./static/images/MSR3D_teaser_crop.jpeg" alt="Detailed overview of benchmarking tasks" style="display: block; margin: 0 auto; width: 80%; height: auto;">
         </div>
         <!--/ Re-rendering. -->
 
@@ -224,6 +235,43 @@ situation descriptions, red for objects in questions, and purple for objects in 
     </div>
     <!--/ Animation. -->
 
+    <div id="results" class="content-block">
+      <h2 class="sub-title has-text-centered">Data sample</h2>
+
+      <div class="task">
+        <div class="columns is-centered" style="position: relative;">
+          <div style="position: absolute; left: 3%; top: 3%;">
+            <span style="font-size: 1.2em;">Scene </span>
+            <div class="select is-medium">
+              <select id="sceneSelector">
+                <option>scene0414</option>
+              </select>
+            </div>
+            &nbsp;&nbsp;&nbsp;
+            <span style="font-size: 1.2em;">Situation </span>
+            <div class="select is-medium">
+              <select id="situationSelector">
+                <option>situation_0</option>
+                <option>situation_1</option>
+                <option>situation_2</option>
+                <option>situation_3</option>
+                <option>situation_4</option>
+                <option>situation_5</option>
+                <option>situation_6</option>
+                <option>situation_7</option>
+                <option>situation_8</option>
+                <option>situation_9</option>
+              </select>
+            </div>
+          </div>
+          <div id="loading" style="position: absolute; left: 50%; top: 45%;"></div>
+          <canvas id="webgl_scene" style="height: 50%; width: 50%;"></canvas>
+        </div>
+        <p id="sit_text" style="margin: 0 0.8em; font-size: 1.2em; text-align:justify;"><span style="color: #ffffff;background-color: #00dd00">Situation</span></p>
+        <p id="q_text" style="margin: 0 0.8em; font-size: 1.2em; text-align:justify;"><span style="color: #ffffff;background-color: #ffa500">Question</span></p>
+        <p style="margin: 0 1.2em; font-size: 0.8em; text-align:justify;">Note: Click the select dropdown to select a scene and a corresponding situation in the scene. Drag to move your view around.</p>
+      </div>
+    </div>
 
     <!-- Concurrent Work. -->
     <!-- <div class="columns is-centered">
@@ -256,7 +304,7 @@ situation descriptions, red for objects in questions, and purple for objects in 
 </section>
 
 
-<section class="section" id="BibTeX">
+<!-- <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{park2021nerfies,
@@ -266,7 +314,7 @@ situation descriptions, red for objects in questions, and purple for objects in 
   year      = {2021},
 }</code></pre>
   </div>
-</section>
+</section> -->
 
 
 <footer class="footer">
@@ -293,4 +341,251 @@ situation descriptions, red for objects in questions, and purple for objects in 
 </footer>
 
 </body>
+
+<script type="module">
+  import { createApp } from 'vue'
+
+  function get_layout_config() {
+    let w = document.documentElement.clientWidth;
+    // console.log(w)
+    let c
+    let o
+    if (w >= 1200) {
+      c = 'is-6'
+      o = 'is-offset-3'
+    } else if (w >= 900) {
+      c = 'is-8'
+      o = 'is-offset-2'
+    }
+
+    else {
+        c = 'is-10'
+        o = 'is-offset-1'
+    }
+    return {'content': c, 'offset': o}
+  }
+
+  let content = document.getElementById('main-content')
+  // content.classList.remove('is-6')
+  // content.classList.remove('is-offset-3')
+
+  let app = createApp({
+    data() {
+      return get_layout_config()
+    }
+  }).mount('#app')
+
+  // function displayWindowSize() {
+  //   let layout = get_layout_config()
+  //   app.$data.content = layout['content']
+  //   app.$data.offset = layout['offset']
+  // }
+  // window.addEventListener("resize", displayWindowSize)
+  // displayWindowSize()
+
+  import * as THREE from 'three'
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+  import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js'
+  // import sqa3d_data from 'https://sqascannetviz.s3.us-west-1.amazonaws.com/sqa3d_website/example_sqa3d_data.json' assert {type: 'json'};
+  import sqa3d_data from './assets/example_sqa3d_data.json' assert {type: 'json'};
+
+  // scene & situation visualization
+  let canvas2 = document.querySelector('#webgl_scene')
+  let scene2 = new THREE.Scene()
+  let assetLoader2 = new GLTFLoader()
+  let model2
+
+  let camera2 = new THREE.PerspectiveCamera(45, 1.618 / 1.0, 0.1, 100)
+  camera2.position.set(5, 4, -5)
+  camera2.add(new THREE.PointLight(0xffffff, 0.5))
+  scene2.add(camera2)
+  for (let ax = 0; ax < 3; ax++) {
+    for (let i = 0; i <= 1; i++) {
+      let spotLight = new THREE.SpotLight(0xAAAAAA)
+      spotLight.position.set(
+        ax == 0 ? 50 * (i * 2 - 1): 0,
+        ax == 1 ? 50 * (i * 2 - 1): 0,
+        ax == 2 ? 50 * (i * 2 - 1): 0,
+      )
+      scene2.add(spotLight)
+    }
+  }
+  scene2.add(new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6))
+  let controls2 = new OrbitControls(camera2, canvas2)
+  controls2.enableZoom = true
+  // controls2.enableDamping = true
+  controls2.object.position.set(camera2.position.x, camera2.position.y, camera2.position.z)
+  controls2.target = new THREE.Vector3(0, 0, 0)
+  controls2.update()
+
+  let renderer2 = new THREE.WebGLRenderer({
+      canvas: canvas2,
+      alpha: true,
+  })
+  renderer2.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer2.outputEncoding = THREE.sRGBEncoding
+  renderer2.setAnimationLoop(() => {
+    renderer2.render(scene2, camera2)
+  });
+
+  const sceneSel = document.querySelector('#sceneSelector')
+  const sitSel = document.querySelector('#situationSelector')
+  const qSel = document.querySelector('#questionSelector')
+  sceneSel.value = 'scene0414'
+  sitSel.value = 'situation_0'
+
+  // function load_model2(e) {
+  //   if (sceneSel.value == '' || sitSel.value == '') {
+  //     return
+  //   }
+  //   scene2.remove(model2)
+  //   // document.querySelector('#loading').innerHTML = `<img src="https://sqascannetviz.s3.us-west-1.amazonaws.com/sqa3d_website/icons/loading.svg" width="48" height="48">`
+  //   // let assetUrl = new URL(`https://sqascannetviz.s3.us-west-1.amazonaws.com/sqa3d_website/${sceneSel.value + "_00"}/${sitSel.value}.glb`, import.meta.url)
+  //   document.querySelector('#loading').innerHTML = `<img src="assets/icons/loading.svg" width="48" height="48">`;
+  //   let assetUrl = `assets/${sceneSel.value + "_00"}/${sitSel.value}.glb`;
+  //   let scene_id = sceneSel.value + "_00"
+  //   let situation = sqa3d_data[scene_id][sitSel.value][0]
+  //   let questions = sqa3d_data[scene_id][sitSel.value][1]
+  //   document.querySelector("#sit_text").innerHTML = `<span style="color: #ffffff;background-color: #00dd00">Situation</span> ${situation}</span>`
+  //   document.querySelector("#q_text").innerHTML = ''
+  //   for (var i = 0; i < questions.length; i++) {
+  //     document.querySelector("#q_text").innerHTML += `<span style="color: #ffffff;background-color: #ffa500">Question ${i}</span> ${questions[i]}</span><br>`
+  //   }
+
+  //   // for (var item in example_sqa3d_data) {
+  //   //   let situation_id = "situation_" + qid2situation[item]["number"]
+  //   //   let scene_id = sceneSel.value + "_00"
+  //   //   if (qid2situation[item]["scene"] == scene_id && situation_id == sitSel.value) {
+  //   //     document.querySelector("#sit_text").innerHTML = `<span style="color: #ffffff;background-color: #00dd00">Situation</span> ${qid2situation[item]["situation"]}</span>`
+  //   //     break
+  //   //   }
+  //   // }
+  //   assetLoader2.load(assetUrl.href, glb => {
+  //     model2 = glb.scene
+  //     scene2.add(model2)
+  //     document.querySelector('#loading').innerHTML = ''
+  //   }, undefined, (error) => {console.error(error)})
+  // }
+
+//   function load_model2(e) {
+//     if (sceneSel.value == '' || sitSel.value == '') {
+//         return;
+//     }
+//     scene2.remove(model2);
+//     document.querySelector('#loading').innerHTML = `<img src="assets/icons/loading.svg" width="48" height="48">`;
+
+//     // Correctly assign assetUrl as a string
+//     let assetUrl = `assets/${sceneSel.value + "_00"}/${sitSel.value}.glb`;
+
+//     let scene_id = sceneSel.value + "_00";
+//     console.log(sqa3d_data)
+//     let situation = sqa3d_data[scene_id][sitSel.value][0];
+//     let questions = sqa3d_data[scene_id][sitSel.value][1];
+
+//     document.querySelector("#sit_text").innerHTML = `<span style="color: #ffffff;background-color: #00dd00">Situation</span> ${situation}`;
+//     document.querySelector("#q_text").innerHTML = '';
+
+//     for (var i = 0; i < questions.length; i++) {
+//         document.querySelector("#q_text").innerHTML += `<span style="color: #ffffff;background-color: #ffa500">Question ${i}</span> ${questions[i]}<br>`;
+//     }
+
+//     assetLoader2.load(assetUrl, glb => {
+//         model2 = glb.scene;
+//         scene2.add(model2);
+//         document.querySelector('#loading').innerHTML = '';
+//     }, undefined, error => {
+//         console.error("Failed to load GLB file:", error);
+//     });
+// }
+
+
+//   sceneSel.addEventListener('change', (e) => {sitSel.value = ''})
+//   sitSel.addEventListener('change', load_model2)
+//   load_model2()
+
+//   // resize renderers
+//   function resizeRenderers() {
+//     let content_width = document.querySelector('#results').offsetWidth
+//     renderer2.setSize(content_width, content_width / 1.618)
+//   }
+//   window.addEventListener('resize', () => {
+//     resizeRenderers()
+//   })
+//   resizeRenderers()
+// Define a variable to hold the mapping dictionary
+// Define a variable to hold the mapping dictionary
+  let imageMapping = {};
+
+  // Fetch and store the image mapping dictionary
+  async function fetchImageMapping() {
+      try {
+          const response = await fetch('/assets/mapping_dict.json');
+          imageMapping = await response.json();
+          console.log('Image mapping loaded:', imageMapping);
+      } catch (error) {
+          console.error('Failed to load image mapping:', error);
+      }
+  }
+
+  // Function to replace placeholders with actual image tags
+  function insertImages(text, sceneId) {
+      const sceneImages = imageMapping[sceneId] || {};
+      return text.replace(/<\w+-(\d+)-IMG>/g, (match, key) => {
+          // Extracts the numeric key
+          const imageUrl = sceneImages[key];
+          console.log('Match:', match);
+          console.log('Key:', key);
+          console.log('Scene Images:', sceneImages);
+          console.log('Image URL:', imageUrl);
+          if (imageUrl) {
+              return `<img src="${imageUrl}" alt="image ${key}" style="width:100px;">`; // Adjust width as necessary
+          }
+          return match; // No image found, return the placeholder
+      });
+  }
+
+  function load_model2(e) {
+      if (sceneSel.value === '' || sitSel.value === '') {
+          return;
+      }
+      scene2.remove(model2);
+      document.querySelector('#loading').innerHTML = `<img src="assets/icons/loading.svg" width="48" height="48">`;
+
+      let assetUrl = `assets/${sceneSel.value + "_00"}/${sitSel.value}.glb`;
+      let scene_id = sceneSel.value + "_00";
+      let situation = sqa3d_data[scene_id][sitSel.value][0];
+      let questions = sqa3d_data[scene_id][sitSel.value][1];
+
+      // Insert images into situation and questions
+      situation = insertImages(situation, scene_id);
+      questions = questions.map(question => insertImages(question, scene_id));
+
+      document.querySelector("#sit_text").innerHTML = `<span style="color: #ffffff;background-color: #00dd00">Situation</span> ${situation}`;
+      document.querySelector("#q_text").innerHTML = questions.map((question, i) => `<span style="color: #ffffff;background-color: #ffa500">Question ${i}</span> ${question}`).join('<br>');
+
+      assetLoader2.load(assetUrl, glb => {
+          model2 = glb.scene;
+          scene2.add(model2);
+          document.querySelector('#loading').innerHTML = '';
+      }, undefined, error => {
+          console.error("Failed to load GLB file:", error);
+      });
+  }
+
+  // Initialize the image mapping and load model functionality
+  window.addEventListener('load', async () => {
+      await fetchImageMapping();
+      load_model2(); // Load the initial model after fetching the dictionary
+  });
+
+  // Resize and rendering functions remain unchanged
+  function resizeRenderers() {
+      let content_width = document.querySelector('#results').offsetWidth;
+      renderer2.setSize(content_width, content_width / 1.618);
+  }
+  window.addEventListener('resize', resizeRenderers);
+  resizeRenderers();
+
+</script>
+
 </html>
