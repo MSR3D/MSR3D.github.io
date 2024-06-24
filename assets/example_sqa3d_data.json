@@ -12,5 +12,68 @@
             [
                 "Navigate me to the object that is used for sitting."
             ]
+        ]},
+    "scene0389_00": {
+        "situation_0": [
+            "I am closing the curtain. To my right, near me, there's a semi-transparent white bag.",
+            [
+                "How many doors are at my 9 o'clock?"
+            ]
+        ]},
+    "scene0257_00": {
+        "situation_0": [
+            "I am sitting on the <chair-22-IMG>. A black chair is at my 9 o'clock, and a chair at my 10 o'clock. There is a black <blackboard-33-IMG> mounted on the wall.",
+            [
+                "How many chairs are stacked near me on my left?"
+            ]
+        ]},
+    "scene0490_00": {
+        "situation_0": [
+            "Near me, at the back, there's a black plastic/mesh chair with a curved sled base. A whiteboard is in my 12 o'clock direction. There is a <chair-2-IMG> and another chair at my 4 o'clock direction.",
+            [
+                "What object is white and used for writing/display at my 6 o'clock?"
+            ]
+        ]},
+    "scene0591_00": {
+        "situation_0": [
+            "There is an orange pillow at my 3 o'clock direction, a brown <door-7-IMG> at my 1 o'clock direction, and a white <shelf-9-IMG> at my 9 o'clock direction. In front of me, at a middle distance, there's a gray metal <shelf-10-IMG> and a partially open tan and black wooden cabinet. Far behind me, there is a <plant-27-IMG>.",
+            [
+                "In which direction from me is the object used for seating?"
+            ]
+        ]},
+    "scene0633_00": { 
+        "situation_0": [
+            "To my right, near me, there's a white and blue wooden <crib-16-IMG> for a baby. In front of me, near me, there's a white <curtain-22-IMG>.",
+            [
+                "What is the color of the <picture-1-IMG> at my 7 o'clock?"
+            ]
+        ]},
+    "scene0645_00": {
+        "situation_0": [
+            "I am sitting on the couch. There is a framed mirror in my 8 o'clock direction, a brown end table and a turquoise jacket in my 2 o'clock direction. At 11 o'clock, there is a beige <pillow-67-IMG>.",
+            [
+                "What is the relationship between bed and picture?"
+            ]
+        ]},
+    "scene0651_00": {
+        "situation_0": [
+            "I am sitting on the <chair-7-IMG>. In front of me, near, there's a light brown and black <chair-10-IMG> in use.",
+            [
+                "How many kitchen cabinets are in the far distance on my right?"
+            ]
+        ]},
+    "scene0704_00": {
+        "situation_0": [
+            "A wall is at my 7 o'clock. There is a <copier-4-IMG> and a white shelf in my 12 o'clock direction.",
+            [
+                "Can I find a copier to my right?"
+            ]
+        ]},
+    "scene0574_00": {
+        "situation_0": [
+            "To my left, near, there's a grey metal ironing board and a white wooden <doorframe-20-IMG>. Behind me, near, there's a beige and brown fabric and wood <bench-2-IMG> and a beige wooden clothes hanger.",
+            [
+                "What is the relationship between <towel-24-IMG> and trash can?"
+            ]
         ]}
 }
