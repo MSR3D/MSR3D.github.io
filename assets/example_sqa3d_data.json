@@ -1,9 +1,16 @@
 {
     "scene0414_00": {
         "situation_0": [
-            "There is a <chair-1-IMG> made of plastic at my 3 o'clock direction",
+            "There is a <chair-1-IMG> made of plastic at my 3 o'clock direction. A black and white <picture-25-IMG> is at my 9 o'clock.",
             [
                 "What object is used for carrying items at my 11 o'clock?"
+            ]
+        ]},
+    "scene0426_00": {
+        "situation_0": [
+            "I am closing the <box-43-IMG>. There is a black <tv-35-IMG> in my 3 o'clock direction, a white closet doors in my 10 o'clock direction, and an assorted colors box in my 4 o'clock direction.",
+            [
+                "Navigate me to the object that is used for sitting."
             ]
         ]}
 }

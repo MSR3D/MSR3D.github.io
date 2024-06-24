@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
-  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+        content="A large-scale multi-modal situated reasoning dataset, scalably collected leveraging 3D scene graphs and vision-language models (VLMs) across a diverse range of real-world 3D scenes.">
+  <meta name="keywords" content="3D Scene Understanding, Situated Reasoning">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nerfies: Deformable Neural Radiance Fields</title>
+  <title>Multi-modal Situated Reasoning in 3D Scenes</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -22,8 +22,8 @@
     gtag('config', 'G-PYVRSFMDRL');
   </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet"> -->
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
@@ -36,8 +36,8 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
+  <!-- <script src="./static/js/bulma-carousel.min.js"></script> -->
+  <!-- <script src="./static/js/bulma-slider.min.js"></script> -->
   <!-- <script src="./static/js/index.js"></script> -->
   <script type="importmap">
     {
@@ -214,7 +214,7 @@
   <div class="container is-max-desktop">
 
 
-    <!-- Animation. -->
+    <!-- Benchmarks. -->
     <div class="columns is-centered">
       <div class="column is-full-width">
         <h2 class="title is-3">Benchmarks</h2>
@@ -233,7 +233,27 @@ situation descriptions, red for objects in questions, and purple for objects in 
 
       </div>
     </div>
-    <!--/ Animation. -->
+    <!--/ Benchmarks. -->
+  
+    <!-- Data distribution. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Data Distribution</h2>
+
+        <!-- Re-rendering. -->
+        <!-- <h3 class="title is-4">Re-rendering the input video</h3> -->
+        <div class="content has-text-justified">
+          <p>
+            Question distribution of MSQA.
+          </p>
+          <!-- Adding the image below the paragraph --> 
+          <img src="./static/images/data_distribution.jpeg" alt="Question distribution" style="display: block; margin: 0 auto; width: 90%; height: auto;">
+        </div>
+        <!--/ Re-rendering. -->
+
+      </div>
+    </div>
+    <!--/ Data distribution. -->
   
     <!-- Data Collection. -->
     <div class="columns is-centered">
@@ -266,6 +286,7 @@ pairs generation, and various post-processing procedures.
             <div class="select is-medium">
               <select id="sceneSelector">
                 <option>scene0414</option>
+                <option>scene0426</option>
               </select>
             </div>
             &nbsp;&nbsp;&nbsp;
@@ -273,7 +294,7 @@ pairs generation, and various post-processing procedures.
             <div class="select is-medium">
               <select id="situationSelector">
                 <option>situation_0</option>
-                <option>situation_1</option>
+                <!-- <option>situation_1</option>
                 <option>situation_2</option>
                 <option>situation_3</option>
                 <option>situation_4</option>
@@ -281,7 +302,7 @@ pairs generation, and various post-processing procedures.
                 <option>situation_6</option>
                 <option>situation_7</option>
                 <option>situation_8</option>
-                <option>situation_9</option>
+                <option>situation_9</option> -->
               </select>
             </div>
           </div>
@@ -452,7 +473,7 @@ pairs generation, and various post-processing procedures.
   const sceneSel = document.querySelector('#sceneSelector')
   const sitSel = document.querySelector('#situationSelector')
   const qSel = document.querySelector('#questionSelector')
-  sceneSel.value = 'scene0414'
+  sceneSel.value = 'scene0426'
   sitSel.value = 'situation_0'
 
   // function load_model2(e) {
@@ -548,7 +569,7 @@ pairs generation, and various post-processing procedures.
       }
   }
 
-  // Function to replace placeholders with actual image tags
+    // Function to replace placeholders with actual image tags
   function insertImages(text, sceneId) {
       const sceneImages = imageMapping[sceneId] || {};
       return text.replace(/<\w+-(\d+)-IMG>/g, (match, key) => {
@@ -565,47 +586,70 @@ pairs generation, and various post-processing procedures.
       });
   }
 
-  function load_model2(e) {
-      if (sceneSel.value === '' || sitSel.value === '') {
+  // Function to load the model and update the situation and question text
+  async function load_model2() {
+      let sceneId = sceneSel.value;
+      let sitId = sitSel.value;
+
+      if (!sceneId || !sitId) {
+          console.log('Either scene ID or situation ID is missing.');
           return;
       }
-      scene2.remove(model2);
+
+      // Fetch new model data
+      await fetchModelData(sceneId, sitId);
+      updateSceneDisplay(); // Update the scene and texts
+  }
+
+  // Fetch model data based on scene and situation IDs
+  async function fetchModelData(sceneId, sitId) {
       document.querySelector('#loading').innerHTML = `<img src="assets/icons/loading.svg" width="48" height="48">`;
+      let assetUrl = `assets/${sceneId}_00/${sitId}.glb`;
 
-      let assetUrl = `assets/${sceneSel.value + "_00"}/${sitSel.value}.glb`;
-      let scene_id = sceneSel.value + "_00";
-      let situation = sqa3d_data[scene_id][sitSel.value][0];
-      let questions = sqa3d_data[scene_id][sitSel.value][1];
-
-      // Insert images into situation and questions
-      situation = insertImages(situation, scene_id);
-      questions = questions.map(question => insertImages(question, scene_id));
-
-      document.querySelector("#sit_text").innerHTML = `<span style="color: #ffffff;background-color: #00dd00">Situation</span> ${situation}`;
-      document.querySelector("#q_text").innerHTML = questions.map((question, i) => `<span style="color: #ffffff;background-color: #ffa500">Question ${i}</span> ${question}`).join('<br>');
-
-      assetLoader2.load(assetUrl, glb => {
+      try {
+          let glb = await assetLoader2.loadAsync(assetUrl);
+          scene2.remove(model2); // Remove previous model
           model2 = glb.scene;
           scene2.add(model2);
           document.querySelector('#loading').innerHTML = '';
-      }, undefined, error => {
+      } catch (error) {
           console.error("Failed to load GLB file:", error);
-      });
+          document.querySelector('#loading').innerHTML = 'Failed to load scene.';
+      }
   }
 
-  // Initialize the image mapping and load model functionality
-  window.addEventListener('load', async () => {
+  // Update the display of the current situation and questions
+  function updateSceneDisplay() {
+      let scene_part_id = sceneSel.value;
+      let sceneId = `${scene_part_id}_00`;
+      let sitId = sitSel.value;
+      console.log('scene id:', sceneId)
+      console.log('data scene sit id:', sqa3d_data[sceneId])
+      let situationText = sqa3d_data[sceneId][sitId][0];
+      let questions = sqa3d_data[sceneId][sitId][1];
+
+      // Insert images and update HTML
+      document.querySelector("#sit_text").innerHTML = `<span style="color: #ffffff;background-color: #00dd00">Situation:</span> ${insertImages(situationText, sceneId)}`;
+      document.querySelector("#q_text").innerHTML = questions.map((q, i) => `<span style="color: #ffffff;background-color: #ffa500">Question ${i}:</span> ${insertImages(q, sceneId)}`).join('<br>');
+  }
+
+  sceneSel.addEventListener('change', load_model2);
+  sitSel.addEventListener('change', load_model2);
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', async function () {
       await fetchImageMapping();
-      load_model2(); // Load the initial model after fetching the dictionary
+      load_model2(); // Load initial model and text
   });
 
-  // Resize and rendering functions remain unchanged
+  // Ensure the renderer resizes correctly
   function resizeRenderers() {
       let content_width = document.querySelector('#results').offsetWidth;
       renderer2.setSize(content_width, content_width / 1.618);
   }
   window.addEventListener('resize', resizeRenderers);
   resizeRenderers();
+
 
 </script>
 
