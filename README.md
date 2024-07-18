@@ -1,5 +1,5 @@
   Official code for msr3d.github.io
-# TODO
+### TODO
 -[] Test set
 -[] Train/val set
 -[] Point cloud and images
