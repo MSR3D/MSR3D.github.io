@@ -13,16 +13,12 @@
 &nbsp;
 
 <div align="center">
-    <a href="https://arxiv.org/abs/2311.12871" target="_blank">
+    <a href="https://msr3d.github.io/" target="_blank">
     <img src="https://img.shields.io/badge/Paper-arXiv-deepgreen" alt="Paper arXiv"></a>
-    <a href="https://embodied-generalist.github.io" target="_blank">
-    <img src="https://img.shields.io/badge/Page-LEO-9cf" alt="Project Page"></a>
-    <a href="https://youtu.be/mlnjz4eSjB4?si=NN9z7TpkTPgBAzBw" target="_blank">
-    <img src="https://img.shields.io/badge/Video-YouTube-9966ff" alt="Video"></a>
-    <a href="https://drive.google.com/drive/folders/1dko2dzdwRWSK3hi1liBpGHZ8Dz97jXdP?usp=sharing" target="_blank">
-    <img src="https://img.shields.io/badge/Data-LEO-blue" alt="Data"></a>
-    <a href="https://drive.google.com/drive/folders/1dko2dzdwRWSK3hi1liBpGHZ8Dz97jXdP?usp=sharing" target="_blank">
-    <img src="https://img.shields.io/badge/Model-LEO-darkorange" alt="Model"></a>
+    <a href="https://msr3d.github.io/" target="_blank">
+    <img src="https://img.shields.io/badge/Page-MSR3D-9cf" alt="Project Page"></a>
+    <a href="https://drive.google.com/drive/folders/1cRghPKwnYMr6a5DSncFvRB6Ep0T9ywU8" target="_blank">
+    <img src="https://img.shields.io/badge/Data-MSR3D-blue" alt="Data"></a>
 </div>
 &nbsp;
 
