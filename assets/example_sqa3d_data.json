@@ -75,5 +75,14 @@
             [
                 "What is the relationship between <towel-24-IMG> and trash can?"
             ]
-        ]}
+        ]},
+    "283ccfeb-107c-24d5-8bbf-05519a3c7c47":
+    {
+        "situation_0": [
+            "I am standing on the floor. To my left, at a middle distance, there's a white and gray rectangular window with a fixed frame and a sliding section. Far in front of me, there's a blue blanket draped on the bed.",
+            [
+                "What is the relation between the table lamp and the <nightstand-13-IMG> in front of me?"
+            ]
+        ]
+    }
 }
