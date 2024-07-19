@@ -1,5 +1,5 @@
 <h2 align="center">
-  <span><img src="assets/leo.svg" width="4%" style="transform: translate(0,9px)"></span><b>Multi-modal Situated Reasoning in 3D Scenes</b>
+  <span><img src="static/images/logo.jpg" width="4%" style="transform: translate(0,9px)"></span><b> Multi-modal Situated Reasoning in 3D Scenes</b>
 </h2>
 
 <div align="center" margin-bottom="6em">
@@ -26,25 +26,9 @@
 </div>
 &nbsp;
 
-<div align="left">
-<img src="assets/teaser.png" width="99%" alt="LEO Teaser">
+<div align="middle">
+<img src="static/images/MSR3D_teaser_crop.jpeg" width="85%" alt="LEO Teaser">
 </div>
-
-We introduce **LEO**, an **embodied multi-modal generalist agent** capable of **grounding**, **reasoning**, **chatting**, **planning**, and **acting** in the **3D world**. **LEO** is trained in a two-stage scheme: *(i) 3D vision-language (VL) alignment* and *(ii) 3D vision-language-action (VLA) instruction tuning*.
-
-We meticulously collect extensive diverse data for training **LEO**. <sup>&dagger;</sup> indicates the task contains our generated data. See [Task and Data](#task-and-data) for details. We show the data statistics as below:
-
-| Dataset | Task | 2D required? | 3D assets | #data |
-| :---: | :---: | :---: | :---: | :---: |
-| *LEO-align* | object captioning | ✗ | Objaverse | 660k |
-|  | object referring<sup>&dagger;</sup> | ✗ | ScanNet + 3RScan | 354k |
-|  | scene captioning<sup>&dagger;</sup> | ✗ | 3RScan | 20k |
-| *LEO-instruct* | 3D captioning | ✗ | ScanNet | 37k |
-|  | 3D QA<sup>&dagger;</sup> | ✗ | ScanNet + 3RScan | 83k |
-|  | 3D dialogue<sup>&dagger;</sup> | ✗ | 3RScan | 11k |
-|  | task planning<sup>&dagger;</sup> | ✗ | 3RScan | 14k |
-|  | navigation | ✓ | MP3D | 60k |
-|  | manipulation | ✓ | CLIPort | 300k |
 
 
 ### TODO
