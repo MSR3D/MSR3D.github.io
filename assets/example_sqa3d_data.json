@@ -84,5 +84,14 @@
                 "What is the relation between the table lamp and the <nightstand-13-IMG> in front of me?"
             ]
         ]
+    },
+    "42446558":
+    {
+        "situation_0": [
+            "I am putting items in the <cabinet-5-IMG>. Behind me, at a middle distance, there's a beige wicker <chair-11-IMG>. To my left, at a middle distance, a white wooden <cabinet-2-IMG> stands with closed drawers.",
+            [
+                "In which direction from me can I find a beige wicker chair?"
+            ]
+        ]
     }
 }

@@ -157,7 +157,7 @@
               </span>
               <!-- Dataset Link. -->
               <span class="link-block">
-                <a href="https://drive.google.com/drive/folders/1cRghPKwnYMr6a5DSncFvRB6Ep0T9ywU8?usp=drive_link"
+                <a href="https://drive.google.com/drive/folders/1cRghPKwnYMr6a5DSncFvRB6Ep0T9ywU8?usp=sharing"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
@@ -285,18 +285,19 @@ pairs generation, and various post-processing procedures.
             <span style="font-size: 1.2em;">Scene </span>
             <div class="select is-medium">
               <select id="sceneSelector">
-                <option>scene0414</option>
-                <option>scene0426</option>
-                <option>scene0389</option>
-                <option>scene0257</option>
-                <option>scene0490</option>
-                <option>scene0574</option>
-                <option>scene0591</option>
-                <option>scene0633</option>
-                <option>scene0645</option>
-                <option>scene0651</option>
-                <option>scene0704</option>
+                <option>scene0414_00</option>
+                <option>scene0426_00</option>
+                <option>scene0389_00</option>
+                <option>scene0257_00</option>
+                <option>scene0490_00</option>
+                <option>scene0574_00</option>
+                <option>scene0591_00</option>
+                <option>scene0633_00</option>
+                <option>scene0645_00</option>
+                <option>scene0651_00</option>
+                <option>scene0704_00</option>
                 <option>283ccfeb-107c-24d5-8bbf-05519a3c7c47</option>
+                <option>42446558</option>
               </select>
             </div>
             &nbsp;&nbsp;&nbsp;
@@ -483,7 +484,7 @@ pairs generation, and various post-processing procedures.
   const sceneSel = document.querySelector('#sceneSelector')
   const sitSel = document.querySelector('#situationSelector')
   const qSel = document.querySelector('#questionSelector')
-  sceneSel.value = 'scene0426'
+  sceneSel.value = 'scene0426_00'
   sitSel.value = 'situation_0'
 
   // function load_model2(e) {
@@ -614,7 +615,7 @@ pairs generation, and various post-processing procedures.
   // Fetch model data based on scene and situation IDs
   async function fetchModelData(sceneId, sitId) {
       document.querySelector('#loading').innerHTML = `<img src="assets/icons/loading.svg" width="48" height="48">`;
-      let assetUrl = `assets/${sceneId}_00/${sitId}.glb`;
+      let assetUrl = `assets/${sceneId}/${sitId}.glb`;
 
       try {
           let glb = await assetLoader2.loadAsync(assetUrl);
@@ -631,7 +632,7 @@ pairs generation, and various post-processing procedures.
   // Update the display of the current situation and questions
   function updateSceneDisplay() {
       let scene_part_id = sceneSel.value;
-      let sceneId = `${scene_part_id}_00`;
+      let sceneId = `${scene_part_id}`;
       let sitId = sitSel.value;
       console.log('scene id:', sceneId)
       console.log('data scene sit id:', sqa3d_data[sceneId])
